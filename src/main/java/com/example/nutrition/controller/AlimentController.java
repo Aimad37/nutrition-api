@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,5 +35,14 @@ public class AlimentController {
         Optional<Aliment> aliment = alimentService.getAlimentByNom(nom);
         return aliment.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Aliment>> getAllAliments() {
+        List<Aliment> aliments = alimentService.getAllAliments();
+        if (aliments.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 204 No Content si la liste est vide
+        }
+        return ResponseEntity.ok(aliments); // 200 OK avec la liste des aliments
     }
 }
